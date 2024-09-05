@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
-const emailRoutes = require('./routes/emailRoutes'); // Ensure the path is correct
+const emailRoutes = require('./routes/emailRoutes'); // Adjust the path if needed
 
-app.use(express.json()); // Parse JSON bodies
+app.use(express.json());
 
 // Use the email routes
 app.use('/api', emailRoutes);
