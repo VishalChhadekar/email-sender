@@ -11,8 +11,10 @@ const sendEmail = async (req, res) => {
             },
         });
 
-        console.log(req.body)
+        // Extract data from req.body
+        const { to, departure, destination, travelDate, flightNumber } = req.body;
 
+        // Updated HTML template with dynamic values
         const htmlTemplate = `
             <!DOCTYPE html>
             <html lang="en">
@@ -44,9 +46,9 @@ const sendEmail = async (req, res) => {
                     <div class="content">
                         <h2>Dear Customer,</h2>
                         <p>Your flight has been successfully booked! Please find the details below:</p>
-                        <p><strong>Flight Number:</strong> ABC123</p>
-                        <p><strong>Departure:</strong> City {{req.body.departure}} to City {{req.body.destination}}</p>
-                        <p><strong>Date:</strong> {{req.body.travelDate}}</p>
+                        <p><strong>Flight Number:</strong> ${flightNumber}</p>
+                        <p><strong>Departure:</strong> City ${departure} to City ${destination}</p>
+                        <p><strong>Date:</strong> ${travelDate}</p>
                         <p>Thank you for choosing our service. We wish you a pleasant journey!</p>
                     </div>
 
@@ -61,13 +63,13 @@ const sendEmail = async (req, res) => {
 
         const mailOptions = {
             from: process.env.EMAIL_USER,
-            to: req.body.to,
+            to: to,
             subject: 'Your Flight Booking Confirmation',
             html: htmlTemplate,
         };
 
         await transporter.sendMail(mailOptions);
-        res.status(200).json({ message: 'Email sent successfully.'});
+        res.status(200).json({ message: 'Email sent successfully.' });
     } catch (error) {
         console.error('Error sending email:', error);
         res.status(500).json({ message: 'Failed to send email.', error });
