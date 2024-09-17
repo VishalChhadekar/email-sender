@@ -46,15 +46,16 @@ const sendEmail = async (req, res) => {
                     <div class="content">
                         <h2>Dear Customer,</h2>
                         <p>Your flight has been successfully booked! Please find the details below:</p>
-                        <p><strong>Flight Number:</strong> ${flightNumber}</p>
-                        <p><strong>Departure:</strong> City ${departure} to City ${destination}</p>
+                        <p><strong>PNR:</strong> ${flightNumber}</p>
+                        <p><strong>Departure:</strong> ${departure}</p>
+                        <p><strong>Arrival:</strong>  ${destination}</p>
                         <p><strong>Date:</strong> ${travelDate}</p>
-                        <p>Thank you for choosing our service. We wish you a pleasant journey!</p>
+                        <p>Thank you for choosing TravelMate. We wish you a pleasant journey!</p>
                     </div>
 
                     <!-- Footer -->
                     <div class="footer">
-                        <p>&copy; 2024 Travel Assist. All rights reserved.</p>
+                        <p>&copy; 2024 TravelMate. All rights reserved.</p>
                     </div>
                 </div>
             </body>
