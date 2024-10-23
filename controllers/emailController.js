@@ -158,9 +158,12 @@ const sendCheckInEmail = async (req, res) => {
                 pass: process.env.EMAIL_PASS,
             },
         });
+
+        // Destructuring req.body
         const { to, pnr, customers, seatNumber, checkInDate, passengerName, flightNumber, departure, destination, departureTime, arrivalTime, gateNumber } = req.body;
-        console.log(req.body)
-        const customerList = customers.map(name => `<li>${name}</li>`).join(''); // Create an HTML list of customer names
+
+        // Convert the string of customer names into an array and map to HTML list items
+        const customerList = customers.split(',').map(name => `<li>${name.trim()}</li>`).join('');
 
         const htmlTemplate = `
             <!DOCTYPE html>
@@ -196,7 +199,7 @@ const sendCheckInEmail = async (req, res) => {
                         <h2>Dear Customer,</h2>
                         <p>Web check-in has been successfully completed for the following passengers:</p>
                         <ul>
-                            ${customerList} <!-- List of customer names -->
+                            ${customerList} <!-- List of customer names as string -->
                         </ul>
                         <p><strong>PNR:</strong> ${pnr}</p>
                         <p><strong>Check-In Date:</strong> ${checkInDate}</p>
@@ -212,27 +215,17 @@ const sendCheckInEmail = async (req, res) => {
             </html>
         `;
 
-        // Generate the PDF
-        // const pdfPath = generateBoardingPass(pnr, checkInDate, seatNumber);
-        // const pdfPath = generateBoardingPass(pnr, passengerName, flightNumber, departure, destination, departureTime, arrivalTime, seatNumber, gateNumber, checkInDate);
         const filePath = path.join(__dirname, '../public/img/boarding-pass.png');
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: to,
             subject: 'Your Web Check-In is Successful - Boarding Pass Attached',
             html: htmlTemplate,
-            // attachments: [
-            //     {
-            //         filename: 'BoardingPass.pdf',
-            //         path: filePath, // Path to the dynamically generated PDF
-            //         contentType: 'application/pdf',
-            //     }
-            // ],
             attachments: [
                 {
-                    filename: 'boarding-pass.png', // The name of the file as it will appear in the email
-                    path: filePath, // Path to the PNG image
-                    contentType: 'image/png' // MIME type for PNG
+                    filename: 'boarding-pass.png',
+                    path: filePath,
+                    contentType: 'image/png'
                 }
             ]
         };
@@ -244,6 +237,7 @@ const sendCheckInEmail = async (req, res) => {
         res.status(500).json({ message: 'Failed to send email.', error });
     }
 };
+
 // const sendCheckInEmail = async (req, res) => {
 //     try {
 //         const transporter = nodemailer.createTransport({
